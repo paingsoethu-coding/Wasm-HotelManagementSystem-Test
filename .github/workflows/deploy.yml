@@ -43,18 +43,22 @@ jobs:
         - name: Login to DockerHub
           run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ vars.DOCKER_USERNAME }} --password-stdin
         - name: Build Docker image
-          run: docker build -t ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest .
+          run: |
+            cd Wasm-HotelManagementSystem.BlazorApp/
+            docker build -t ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest .
 
         - name: Push Docker image
-          run: docker push ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest
+          run: |  
+            cd Wasm-HotelManagementSystem.BlazorApp/
+            docker push ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest
         
-        - name: Deploy to Render via API
-          run: |
-           curl -X POST \
-             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-             -H "Content-Type: application/json" \
-             https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
-
+        # - name: Deploy to Render via API
+        #   run: |
+        #    curl -X POST \
+        #      -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+        #      -H "Content-Type: application/json" \
+        #      https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+            
         # - name: Trigger Deploy on Render
         #   run: |
         #     curl -X POST https://api.render.com/deploy/srv-xxxxxxxxx?key=${{ secrets.RENDER_API_KEY }}
