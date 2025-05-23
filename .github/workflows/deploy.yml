@@ -42,39 +42,22 @@ jobs:
 
         - name: Login to DockerHub
           run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ vars.DOCKER_USERNAME }} --password-stdin
-
-    # - name: Build and push Docker image
-    #   run: |
-    #     docker build -t     /yourapp:latest .
-    #     docker push yourdockerhubuser/yourapp:latest
-
-    # - name: Trigger Deploy on Render
-    #   run: |
-    #     curl -X POST https://api.render.com/deploy/srv-xxxxxxxxx?key=${{ secrets.RENDER_API_KEY }}
-
-
-      
-
-        - name: Build and publish Blazor WASM
-          run: dotnet publish Wasm-HotelManagementSystem.BlazorApp/Wasm-HotelManagementSystem.BlazorApp.csproj -c Release -o publish
-
-        - name: Copy wwwroot for nginx
-          run: |
-           mkdir deploy
-           cp -r publish/wwwroot/* deploy/
-
-        - name: Copy nginx.conf
-          run: cp nginx.conf deploy/
-
         - name: Build Docker image
           run: docker build -t ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest .
 
-        - name: Login to Docker Hub
-          uses: docker/login-action@v2
-          with:
-            username: ${{ vars.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_TOKEN }}
-
         - name: Push Docker image
           run: docker push ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest
+        
+        - name: Deploy to Render via API
+          run: |
+           curl -X POST \
+             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+             -H "Content-Type: application/json" \
+             https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
 
+        # - name: Trigger Deploy on Render
+        #   run: |
+        #     curl -X POST https://api.render.com/deploy/srv-xxxxxxxxx?key=${{ secrets.RENDER_API_KEY }}
+
+
+      
