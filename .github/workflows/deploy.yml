@@ -16,10 +16,10 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0.100'
 
       - name: Build and publish Blazor WASM
-        run: dotnet publish Wasm-HotelManagementSystem.BlazorApp.csproj -c Release -o publish
+        run: dotnet publish Wasm-HotelManagementSystem.BlazorApp/Wasm-HotelManagementSystem.BlazorApp.csproj -c Release -o publish
 
       - name: Copy wwwroot for nginx
         run: |
