@@ -6,6 +6,6 @@ RUN dotnet publish "Wasm-HotelManagementSystem.BlazorApp.csproj" -c Release -o /
 
 # Serve with nginx
 FROM nginx:alpine AS final
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY Wasm-HotelManagementSystem.BlazorApp/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/build/wwwroot /usr/share/nginx/html
 EXPOSE 80
