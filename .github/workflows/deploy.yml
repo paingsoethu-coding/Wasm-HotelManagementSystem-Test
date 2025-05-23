@@ -52,12 +52,12 @@ jobs:
             cd Wasm-HotelManagementSystem.BlazorApp/
             docker push ${{ vars.DOCKER_USERNAME }}/hms-wasm:latest
         
-        # - name: Deploy to Render via API
-        #   run: |
-        #    curl -X POST \
-        #      -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-        #      -H "Content-Type: application/json" \
-        #      https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+        - name: Deploy to Render via API
+          run: |
+           curl -X POST \
+             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+             -H "Content-Type: application/json" \
+             https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
             
         # - name: Trigger Deploy on Render
         #   run: |
